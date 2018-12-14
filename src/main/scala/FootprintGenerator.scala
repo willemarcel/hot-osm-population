@@ -117,9 +117,11 @@ case class FootprintGenerator(qaTilesPath: String, country: String, tileCrs: CRS
 
           case e: TopologyException =>
             println(s"ERROR: TopologyException in $key: ${e.getMessage}")
+
+          case e: IllegalStateException =>
+            println(s"ERROR: IllegalStateException in $key: ${e.getMessage}")
         }
       }}
-
     raster
   }
 
