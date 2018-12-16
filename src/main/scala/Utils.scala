@@ -176,7 +176,7 @@ object Utils {
     val store = writer.attributeStore
     val hist = rdd.histogram(100)
 
-    Pyramid.upLevels(rdd, layoutScheme, 12, Sum) { (rdd, zoom) =>
+    Pyramid.upLevels(rdd, layoutScheme, 16, Sum) { (rdd, zoom) =>
       val id = LayerId(name, zoom)
       if (store.layerExists(id)) store.delete(id)
       writer.write(id, rdd, ZCurveKeyIndexMethod)
@@ -193,7 +193,7 @@ object Utils {
     val attributeStore = FileAttributeStore(catalog)
     val reader = FileCOGLayerReader(attributeStore)(spark.sparkContext)
     val rdd = reader.read[SpatialKey, MultibandTile](
-      id = LayerId(layer, 12),
+      id = LayerId(layer, 16),
       numPartitions = 64)
 
     rdd.withContext { _.mapValues(_.band(band)) }.toRF(col)

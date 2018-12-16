@@ -26,14 +26,14 @@ import org.apache.spark.sql.functions.udf
 
 object OSM {
   def buildingsRF(qaTilesPath: String, countryCode: String, layer: String = "osm")(implicit spark: SparkSession): RasterFrame = {
-    val layout = ZoomedLayoutScheme(WebMercator, 12).levelForZoom(12).layout
+    val layout = ZoomedLayoutScheme(WebMercator, 16).levelForZoom(16).layout
     val countryBound = CountryGeometry(countryCode).get.geom.reproject(LatLng, WebMercator)
     val keys = layout.mapTransform.keysForGeometry(countryBound).toArray
     val partitions: Array[Array[SpatialKey]] = keys.grouped(64).toArray
 
     val rdd: RDD[(SpatialKey, Tile)] =
       spark.sparkContext.parallelize(partitions, partitions.length).mapPartitions { part =>
-        val layout = ZoomedLayoutScheme(WebMercator, 12).levelForZoom(12)
+        val layout = ZoomedLayoutScheme(WebMercator, 16).levelForZoom(16)
         val generator = FootprintGenerator (qaTilesPath, countryCode)
         part.flatMap { _.map { key: SpatialKey =>
           val tile = generator(key, layout, "osm").tile
@@ -66,7 +66,7 @@ object OSM {
     val md = rf.tileLayerMetadata.left.get
 
     // this layout level is required to find the vector tiles
-    val layoutLevel = ZoomedLayoutScheme(WebMercator, 256).levelForZoom(12)
+    val layoutLevel = ZoomedLayoutScheme(WebMercator, 256).levelForZoom(16)
     val fetchOSMTile = udf { (col: Int, row: Int) =>
       generator (SpatialKey(col, row), layoutLevel, "osm").tile
     }

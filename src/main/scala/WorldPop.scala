@@ -56,7 +56,7 @@ object WorldPop {
   def rasterFrame(
      file: String,
      columnName: String,
-     layout: LayoutDefinition = ZoomedLayoutScheme(WebMercator, 256).levelForZoom(12).layout,
+     layout: LayoutDefinition = ZoomedLayoutScheme(WebMercator, 256).levelForZoom(16).layout,
      crs: CRS = WebMercator,
      masks: Traversable[Polygon] = Array.empty[Polygon]
    )(implicit spark: SparkSession): RasterFrame = {

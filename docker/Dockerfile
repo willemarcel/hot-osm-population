@@ -1,6 +1,8 @@
 FROM openjdk:8-jre
 
-RUN apt-get update && apt-get install -y libnss3 curl python python-pip && pip install --upgrade awscli && apt-get clean
+RUN apt-get update && apt-get install -y libnss3 curl python python-pip && \
+  apt-get clean && \
+  pip install --upgrade awscli
 RUN mkdir /task
 WORKDIR /task
 
