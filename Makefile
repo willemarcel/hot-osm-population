@@ -23,7 +23,8 @@ push-ecr:
 	docker push ${ECR_REPO}
 
 train: ${ASSEMBLY_JAR}
-	spark-submit --master "local[*]" --driver-memory 4G \
+	spark-submit --master "local[*]" \
+--driver-memory 59G --executor-memory 59G \
 --class com.azavea.hotosmpopulation.LabeledTrainApp \
 target/scala-2.11/hot-osm-population-assembly.jar \
 --country botswana \
@@ -33,7 +34,8 @@ target/scala-2.11/hot-osm-population-assembly.jar \
 --model ${WORKDIR}/models/botswana-regression
 
 predict: ${ASSEMBLY_JAR}
-	spark-submit --master "local[*]" --driver-memory 4G \
+	spark-submit --master "local[*]" \
+--driver-memory 59G --executor-memory 59G \
 --class com.azavea.hotosmpopulation.LabeledPredictApp \
 target/scala-2.11/hot-osm-population-assembly.jar \
 --country botswana \
